@@ -1,6 +1,9 @@
+## How to add Shadcn component
+Run `pnpm dlx shadcn@latest add button`
+
+you'll find the component in added in `app/components/ui`, which you can import using `import { <Component Name> } from "@/components/ui/<Component Name>"`;
 
 ```
-/
 /
 ├── app/
 │   ├── layout.tsx         # Main app layout
