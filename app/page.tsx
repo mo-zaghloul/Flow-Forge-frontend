@@ -1,4 +1,4 @@
-import FlowDemo from "../FlowDemo";
+import FlowDemo from "./FlowDemo";
 
 export default function Home() {
   return (
