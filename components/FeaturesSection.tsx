@@ -71,14 +71,14 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section className="py-20 sm:py-32 bg-white dark:bg-gray-900">
+    <section className="py-20 sm:py-32 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4 text-sm">Features</Badge>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
             Everything you need to automate
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Powerful features designed to streamline your workflow automation and boost productivity
           </p>
         </div>
@@ -89,12 +89,12 @@ export default function FeaturesSection() {
             return (
               <Card 
                 key={index} 
-                className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-gray-200 dark:border-gray-700"
+                className="group hover:shadow-md transition-all duration-300"
               >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-3">
-                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">
-                      <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    <div className="p-3 bg-muted rounded-lg group-hover:bg-muted/80 transition-colors">
+                      <Icon className="w-6 h-6 text-foreground" />
                     </div>
                     <Badge variant="secondary" className="text-xs">
                       {feature.badge}
