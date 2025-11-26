@@ -9,6 +9,11 @@ you'll find the component in added in `app/components/ui`, which you can import 
 │   ├── layout.tsx         # Main app layout
 │   ├── page.tsx           # Home page
 │   ├── globals.css        # Global styles
+|   ├── (pages)/
+|   |   ├─── landingpage/
+|   |   |    └── page.tsx 
+|   |   └─── canvas/
+|   |        └── page.tsx 
 │   └── components/
 │       └── ui/            # <-- Your shadcn/ui components path
 ├── public/                # Static assets (images, fonts)
