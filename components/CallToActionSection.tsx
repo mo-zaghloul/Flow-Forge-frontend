@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 
 const benefits = [
   "Free 14-day trial, no credit card required",
@@ -33,13 +34,15 @@ export default function CallToActionSection() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              size="lg" 
-              className="text-lg px-8 py-6 group"
-            >
-              Start Building Free
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link href="/canvas">
+              <Button 
+                size="lg" 
+                className="text-lg px-8 py-6 group"
+              >
+                Start Building Free
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
             <Button 
               size="lg" 
               variant="outline" 
