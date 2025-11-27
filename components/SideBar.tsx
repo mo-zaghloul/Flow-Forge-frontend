@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Edit, File, Archive, User, Settings } from "lucide-react";
+import { Home, Edit, Workflow, Archive, User, Settings } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export default function Sidebar() {
   const menuItems: MenuItem[] = [
     { name: "Create Flow", icon: <Edit size={22} />, href: "/canvas" }, 
     { name: "Home", icon: <Home size={22} />, href: "/home" },               
-    { name: "Project", icon: <File size={22} />, href: "/project" },
+    { name: "Flows", icon: <Workflow size={22} />, href: "/project" },
     { name: "Templates", icon: <Archive size={22} />, href: "/templates" },
   ];
 
