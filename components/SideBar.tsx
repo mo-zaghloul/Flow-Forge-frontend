@@ -16,8 +16,8 @@ export default function Sidebar() {
   const [open, setOpen] = useState(false);
 
   const menuItems: MenuItem[] = [
-    { name: "Create Flow", icon: <Edit size={22} />, href: "/profile" }, 
-    { name: "Home", icon: <Home size={22} />, href: "/" },               
+    { name: "Create Flow", icon: <Edit size={22} />, href: "/canvas" }, 
+    { name: "Home", icon: <Home size={22} />, href: "/home" },               
     { name: "Project", icon: <File size={22} />, href: "/project" },
     { name: "Templates", icon: <Archive size={22} />, href: "/templates" },
   ];
