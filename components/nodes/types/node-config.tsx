@@ -4,7 +4,7 @@ export type NodeConfig = {
 
 export interface FlowNodeData {
   label: string;
-  reactflowType?: string;
+  type?: string;
   config?: NodeConfig;
   onAddNode?: (id: string) => void;
 }
