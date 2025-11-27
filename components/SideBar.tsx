@@ -33,11 +33,12 @@ export default function Sidebar() {
         <div className="px-3 py-6">
           <button onClick={() => setOpen(!open)} className="block">
             <Image
-              src="/images/logo.svg"
+              src="/FlowForgeLogo.png"
               alt="Logo"
-              width={30}
-              height={30}
-              className={`${open ? "w-10" : "w-14"} transition-all duration-300`}
+              width={open ? 40 : 40}
+              height={open ? 40 : 40}
+              className="transition-all duration-300"
+              priority
             />
           </button>
         </div>
