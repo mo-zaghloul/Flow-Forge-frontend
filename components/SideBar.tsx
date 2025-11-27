@@ -30,7 +30,7 @@ export default function Sidebar() {
       {/* Logo + Toggle + Menu */}
       <div>
         {/* Logo + Toggle */}
-        <div className="px-3 py-6">
+        <div className="py-6 flex justify-center">
           <button onClick={() => setOpen(!open)} className="block">
             <Image
               src="/FlowForgeLogo.png"
@@ -49,7 +49,9 @@ export default function Sidebar() {
             <li key={item.name}>
               <Link
                 href={item.href}
-                className="flex items-center gap-4 px-3 py-3 hover:bg-gray-200 rounded"
+                className={`flex items-center gap-4 py-3 hover:bg-gray-200 rounded ${
+                  open ? "px-3" : "justify-center"
+                }`}
               >
                 {item.icon}
                 {open && <span className="text-sm font-semibold">{item.name}</span>}
@@ -60,7 +62,11 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom: User + Name + Settings */}
-      <div className="px-3 py-6 mb-4 flex items-center justify-between">
+      <div
+        className={`py-6 mb-4 flex items-center ${
+          open ? "px-3 justify-between" : "justify-center"
+        }`}
+      >
         <div className="flex items-center gap-4">
           <User size={22} />
           {open && <span className="font-semibold text-sm">Ahmed Emad</span>}
