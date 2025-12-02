@@ -47,7 +47,7 @@ export default function Home() {
         <p className="text-gray-700 mb-6 text-base">
           Build a chat agent workflow with custom logic and tools
         </p>
-        <button className="bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition-colors inline-flex items-center gap-2 font-medium">
+        <button className="bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition-colors inline-flex items-center gap-2 font-medium cursor-pointer">
           <span><Plus/> </span>
           <span>Create</span>
         </button>
