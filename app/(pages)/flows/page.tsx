@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import HomeCard from '@/components/HomeCard';
+import FlowCard from '@/components/FlowCard';
 import { Plus } from 'lucide-react';
 import { getWorkflows, type Workflow } from '@/lib/api/workflows';
 
@@ -43,7 +43,7 @@ export default function Home() {
           <p className="text-gray-600">Loading workflows...</p>
         ) : (
           workflows.map((workflow) => (
-            <HomeCard
+            <FlowCard
               key={workflow.id}
               id={workflow.id}
               title={workflow.title}
