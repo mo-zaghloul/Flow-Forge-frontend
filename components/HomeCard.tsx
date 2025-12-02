@@ -1,17 +1,22 @@
 "use client";
-import { Workflow } from 'lucide-react';
+import { Workflow as WorkflowIcon } from 'lucide-react';
 
 interface HomeCardProps {
+  id?: string;
   title: string;
   description: string;
   author: string;
+  onClick?: () => void;
 }
 
-export default function HomeCard({ title, description, author }: HomeCardProps) {
+export default function HomeCard({ title, description, author, onClick }: HomeCardProps) {
   return (
-    <div className="bg-gray-300 rounded-2xl p-6 shadow hover:shadow-md transition-shadow cursor-pointer relative">
+    <div 
+      onClick={onClick}
+      className="bg-gray-300 rounded-2xl p-6 shadow hover:shadow-md transition-shadow cursor-pointer relative"
+    >
       <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center mb-4">
-        <Workflow className="w-6 h-6 text-black" />
+        <WorkflowIcon className="w-6 h-6 text-black" />
       </div>
 
       <div>
