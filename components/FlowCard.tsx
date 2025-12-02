@@ -1,7 +1,7 @@
 "use client";
 import { Workflow as WorkflowIcon } from 'lucide-react';
 
-interface HomeCardProps {
+interface FlowCardProps {
   id?: string;
   title: string;
   description: string;
@@ -9,7 +9,7 @@ interface HomeCardProps {
   onClick?: () => void;
 }
 
-export default function HomeCard({ title, description, author, onClick }: HomeCardProps) {
+export default function FlowCard({ title, description, author, onClick }: FlowCardProps) {
   return (
     <div 
       onClick={onClick}

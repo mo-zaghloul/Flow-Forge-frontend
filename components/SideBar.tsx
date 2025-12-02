@@ -15,10 +15,9 @@ type MenuItem = {
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
 
-  const menuItems: MenuItem[] = [
-    { name: "Create Flow", icon: <Edit size={22} />, href: "/canvas" }, 
-    { name: "Home", icon: <Home size={22} />, href: "/home" },               
-    { name: "Flows", icon: <Workflow size={22} />, href: "/project" },
+   const menuItems: MenuItem[] = [
+    { name: "Create Flow", icon: <Edit size={22} />, href: "/canvas" },              
+    { name: "Flows", icon: <Workflow size={22} />, href: "/flows" },
     { name: "Templates", icon: <Archive size={22} />, href: "/templates" },
   ];
 
