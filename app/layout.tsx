@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Flow Forge - Visual Workflow Automation Platform",
   description: "Build and automate workflows without code. Flow Forge empowers teams to create, manage, and optimize workflows with an intuitive drag-and-drop interface.",
+  icons: {
+    icon: "/FlowForgeLogo.png",
+  },
 };
 
 export default function RootLayout({
