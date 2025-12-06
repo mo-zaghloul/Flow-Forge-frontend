@@ -1,5 +1,7 @@
+import { LucideIcon } from "lucide-react";
+
 export type NodeConfig = {
-  [key: string]: any;
+  [key: string]: LucideIcon | string;
 };
 
 export interface FlowNodeData {
@@ -8,8 +10,9 @@ export interface FlowNodeData {
   config?: NodeConfig;
   isStartNode?: boolean;
   isNewNode?: boolean;
-  icon?: any;            
+  icon?: LucideIcon | string;            
   bgColor?: string;    
+  baseColor?: string;    
   iconColor?: string;    
   onAddClick?: () => void;
 }
@@ -17,8 +20,9 @@ export interface FlowNodeData {
 export interface NodeTemplate {
   name: string;
   type: string;
-  icon: any;
+  icon: LucideIcon | string;
   bgColor: string;
+  baseColor?: string;
   iconColor: string;
   description?: string;
 }

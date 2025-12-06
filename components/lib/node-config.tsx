@@ -1,6 +1,7 @@
-import { MousePointer2, ArrowRight, Upload, Square, Play } from "lucide-react";
+import { MousePointer2, ArrowRight, Upload, Square, Play, Plus } from "lucide-react";
 import { NodeTemplate } from "../types/node-config";
 
+const BASE_COLOR = "bg-[#ffffff]";
 export const availableNodes: NodeTemplate[] = [
   {
     name: "Start",
@@ -8,6 +9,7 @@ export const availableNodes: NodeTemplate[] = [
     icon: Play,
     bgColor: "bg-[#7AF1A7]",
     iconColor: "text-black",
+    baseColor: "bg-[#ffffff]",
     description: "Start your workflow"
   },
   {
@@ -16,6 +18,7 @@ export const availableNodes: NodeTemplate[] = [
     icon: MousePointer2,
     bgColor: "bg-[#0037FF9E]",
     iconColor: "text-black",
+    baseColor: BASE_COLOR,
     description: "AI agent node"
   },
   {
@@ -23,6 +26,7 @@ export const availableNodes: NodeTemplate[] = [
     type: "upload",
     icon: Upload,
     bgColor: "bg-[#FF8E149E]",
+    baseColor: BASE_COLOR,
     iconColor: "text-black",
     description: "Upload files and media"
   },
@@ -30,6 +34,7 @@ export const availableNodes: NodeTemplate[] = [
     name: "Output",
     type: "output",
     icon: ArrowRight,
+    baseColor: BASE_COLOR,
     bgColor: "bg-[#FF1418B8]",
     iconColor: "text-black",
     description: "Output results"
@@ -39,6 +44,7 @@ export const availableNodes: NodeTemplate[] = [
     type: "end",
     icon: Square,
     bgColor: "bg-[#14FFE4B8]",
+    baseColor: BASE_COLOR,
     iconColor: "text-black",
     description: "End workflow"
   },

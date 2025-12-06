@@ -13,13 +13,13 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
-import CustomNode from "./custom-node";
+import BaseNode from "./BaseNode";
 import NodePickerDialog from "./dialog";
 import { FlowNodeData } from "../types/node-config";
 import { NodeTemplate } from "../types/node-config";
 
 const nodeTypes = {
-  custom: CustomNode,
+  custom: BaseNode,
 };
 
 const initialNodes: Node<FlowNodeData>[] = [
@@ -126,7 +126,6 @@ export default function FlowCanvas() {
       >
         <Background />
         <Controls />
-        <MiniMap />
       </ReactFlow>
 
       <NodePickerDialog

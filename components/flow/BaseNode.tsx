@@ -4,29 +4,37 @@ import { NodeProps, Handle, Position } from "reactflow";
 import { Plus } from "lucide-react";
 import type { FlowNodeData } from "../types/node-config";
 
-interface CustomNodeProps extends NodeProps<FlowNodeData> {
+interface BaseNodeProps extends NodeProps<FlowNodeData> {
   data: FlowNodeData & { onAddClick?: () => void };
 }
 
-export default function CustomNode({ data }: CustomNodeProps) {
+export default function BaseNode({ data }: BaseNodeProps) {
   const nodeData: FlowNodeData = data || { label: "New Node" };
+  const isNewNode = nodeData.isNewNode;
 
   return (
-    <div className="relative bg-white border-2 border-gray-300 rounded-[20px] w-[190px] min-h-[80px] flex items-center px-4 py-3 gap-3 shadow-md hover:shadow-lg transition-shadow">
-      
+    <div
+      className={`relative bg-gray-200 opacity-80 hover:ring hover:ring-gray-400  rounded-[20px] w-fit flex items-center px-4 py-3 gap-3`}>
       {/* زرار + على الشمال (للـ New Node فقط) */}
-      {nodeData.isNewNode ? (
+      {isNewNode ? (
         <button
           onClick={data?.onAddClick}
-          className="w-10 h-10 rounded-lg bg-blue-500 hover:bg-blue-600 flex items-center justify-center transition-all hover:scale-110 shrink-0"
+          className="w-10 h-10  rounded-md cursor-pointer flex items-center justify-center transition-all hover:scale-110 shrink-0"
         >
-          <Plus size={20} className="text-white" />
+          <Plus size={20} className="text-black size-9" />
         </button>
       ) : (
         /* الأيقونة الخاصة بالـ node */
-        <div className={`w-10 h-10 rounded-lg ${nodeData.bgColor || 'bg-gradient-to-br from-purple-100 to-purple-200'} flex items-center justify-center shrink-0`}>
+        <div
+          className={`w-10 h-10 rounded-lg ${
+            nodeData.bgColor ||
+            "bg-gradient-to-br from-purple-100 to-purple-200"
+          } flex items-center justify-center shrink-0`}
+        >
           {nodeData.icon ? (
-            <nodeData.icon className={`w-5 h-5 ${nodeData.iconColor || 'text-black'}`} />
+            <nodeData.icon
+              className={`w-5 h-5 ${nodeData.iconColor || "text-black"}`}
+            />
           ) : (
             <span className="text-2xl">⚡</span>
           )}
@@ -44,12 +52,12 @@ export default function CustomNode({ data }: CustomNodeProps) {
       <Handle
         type="target"
         position={Position.Left}
-        className="!w-3 !h-3 !bg-green-500 !border-2 !border-white"
+        className="!w-3 !h-3 !border-2 !border-white"
       />
       <Handle
         type="source"
         position={Position.Right}
-        className="!w-3 !h-3 !bg-blue-500 !border-2 !border-white"
+        className="!w-3 !h-3 !border-2 !border-white"
       />
     </div>
   );
