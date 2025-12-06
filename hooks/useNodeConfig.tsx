@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { NodeConfig } from "../components/nodes/types/node-config";
+import type { NodeConfig } from "../components/types/node-config";
 
 export function useNodeConfig() {
   const [configMap, setConfigMap] = useState<Record<string, NodeConfig>>({});
