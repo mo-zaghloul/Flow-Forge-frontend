@@ -5,6 +5,7 @@ export type NodeConfig = {
 };
 
 export interface FlowNodeData {
+  id: string;
   label: string;
   type?: string;
   config?: NodeConfig;
@@ -15,9 +16,11 @@ export interface FlowNodeData {
   baseColor?: string;    
   iconColor?: string;    
   onAddClick?: () => void;
+  onAgentClick?: () => void;
 }
 
 export interface NodeTemplate {
+  id: string;
   name: string;
   type: string;
   icon: LucideIcon | string;

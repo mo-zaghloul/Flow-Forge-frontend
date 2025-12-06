@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import type { FlowNodeData } from "../types/node-config";
 
 interface BaseNodeProps extends NodeProps<FlowNodeData> {
-  data: FlowNodeData & { onAddClick?: () => void };
+  data: FlowNodeData ;
 }
 
 export default function BaseNode({ data }: BaseNodeProps) {
@@ -25,7 +25,8 @@ export default function BaseNode({ data }: BaseNodeProps) {
         </button>
       ) : (
         /* الأيقونة الخاصة بالـ node */
-        <div
+        <button
+          onClick={data.id === "agent" ? data.onAgentClick : undefined}
           className={`w-10 h-10 rounded-lg ${
             nodeData.bgColor ||
             "bg-gradient-to-br from-purple-100 to-purple-200"
@@ -38,7 +39,7 @@ export default function BaseNode({ data }: BaseNodeProps) {
           ) : (
             <span className="text-2xl">⚡</span>
           )}
-        </div>
+        </button>
       )}
 
       {/* اسم النود */}

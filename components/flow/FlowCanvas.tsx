@@ -4,7 +4,6 @@ import { useCallback, useState } from "react";
 import ReactFlow, {
   Background,
   Controls,
-  MiniMap,
   addEdge,
   useNodesState,
   useEdgesState,
@@ -17,6 +16,7 @@ import BaseNode from "./BaseNode";
 import NodePickerDialog from "./dialog";
 import { FlowNodeData } from "../types/node-config";
 import { NodeTemplate } from "../types/node-config";
+import CreateAgentDialog from "../dialogs/CreateAgentDialog";
 
 const nodeTypes = {
   custom: BaseNode,
@@ -24,10 +24,10 @@ const nodeTypes = {
 
 const initialNodes: Node<FlowNodeData>[] = [
   {
-    id: "new-1",
+    id: "new",
     type: "custom",
     position: { x: 250, y: 200 },
-    data: { label: "New Node", isNewNode: true },
+    data: { id: "new", label: "New Node", isNewNode: true },
   },
 ];
 
@@ -35,8 +35,10 @@ export default function FlowCanvas() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedSourceNodeId, setSelectedSourceNodeId] = useState<string | null>(null);
-
+  const [selectedSourceNodeId, setSelectedSourceNodeId] = useState<
+    string | null
+  >(null);
+  const [agentDialogOpen, setAgentDialogOpen] = useState(false);
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -45,6 +47,11 @@ export default function FlowCanvas() {
   const handleAddNodeClick = useCallback((nodeId: string) => {
     setSelectedSourceNodeId(nodeId);
     setDialogOpen(true);
+  }, []);
+
+  const handleAgentDialogClick = useCallback((nodeId: string) => {
+    setSelectedSourceNodeId(nodeId);
+    setAgentDialogOpen(true);
   }, []);
 
   const handleSelectNode = useCallback(
@@ -61,10 +68,11 @@ export default function FlowCanvas() {
             ...node,
             data: {
               ...node.data,
+              id: nodeTemplate.id,
               label: nodeTemplate.name,
               type: nodeTemplate.type,
-              icon: nodeTemplate.icon,           // الأيقونة
-              bgColor: nodeTemplate.bgColor,     // لون الخلفية
+              icon: nodeTemplate.icon, // الأيقونة
+              bgColor: nodeTemplate.bgColor, // لون الخلفية
               iconColor: nodeTemplate.iconColor, // لون الأيقونة
               isNewNode: false,
             },
@@ -83,6 +91,7 @@ export default function FlowCanvas() {
           y: sourceNode.position.y,
         },
         data: {
+          id: newNodeId,
           label: "New Node",
           isNewNode: true,
         },
@@ -108,7 +117,13 @@ export default function FlowCanvas() {
     ...node,
     data: {
       ...node.data,
-      onAddClick: node.data.isNewNode ? () => handleAddNodeClick(node.id) : undefined,
+      onAddClick: node.data.isNewNode
+        ? () => handleAddNodeClick(node.id)
+        : undefined,
+      onAgentClick:
+        node.data.id === "agent"
+          ? () => handleAgentDialogClick(node.id)
+          : undefined,
     },
   }));
 
@@ -128,6 +143,10 @@ export default function FlowCanvas() {
         <Controls />
       </ReactFlow>
 
+      <CreateAgentDialog
+        open={agentDialogOpen}
+        onClose={() => setAgentDialogOpen(false)}
+      />
       <NodePickerDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}

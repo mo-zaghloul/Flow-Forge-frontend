@@ -39,7 +39,6 @@ export default function NodePickerDialog({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="rounded-2xl p-6 max-w-2xl max-h-[85vh] flex flex-col">
-        
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">
             Add New Node
@@ -79,7 +78,7 @@ export default function NodePickerDialog({
                   >
                     <Icon className={`w-5 h-5 ${node.iconColor}`} />
                   </div>
-                  
+
                   <div className="flex flex-col items-start flex-1 text-left">
                     <span className="text-gray-800 font-medium">
                       {node.name}
@@ -95,11 +94,10 @@ export default function NodePickerDialog({
             })
           ) : (
             <div className="text-center py-8 text-gray-500">
-              No nodes found matching "{search}"
+              No nodes found matching &quot;{search}&quot;
             </div>
           )}
         </div>
-
       </DialogContent>
     </Dialog>
   );
