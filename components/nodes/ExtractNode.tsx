@@ -2,7 +2,7 @@
 
 import { NodeProps, Handle, Position } from "reactflow";
 import { MousePointer2 } from "lucide-react";
-import type { FlowNodeData } from "./types/node-config";
+import type { FlowNodeData } from "../types/node-config";
 
 
 export default function ExtractNode({ data }: NodeProps<FlowNodeData>) {
