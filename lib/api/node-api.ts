@@ -9,6 +9,23 @@ export type GetWorkflowsResponse = {
 
 export const GetWorkflows = async () => {
   const response = await api.get<GetWorkflowsResponse>("/workflows");
+  console.log("GetWorkflows response:", response.data);
+  
+  // Handle if the response is wrapped in an object (e.g., { workflows: [...] })
+  if (response.data && typeof response.data === 'object' && !Array.isArray(response.data)) {
+    // @ts-ignore - API might return wrapped data
+    if (Array.isArray(response.data.workflows)) {
+      // @ts-ignore
+      return response.data.workflows;
+    }
+  }
+  
+  // Return empty array if data is not in expected format
+  if (!Array.isArray(response.data)) {
+    console.error("GetWorkflows: Expected array but got:", typeof response.data, response.data);
+    return [];
+  }
+  
   return response.data;
 };
 
