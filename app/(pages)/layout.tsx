@@ -8,7 +8,7 @@ export default function PagesLayout({
   return (
     <div className="flex w-full h-screen">
       <Sidebar />
-      <main className="flex-1 pl-15">{children}</main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
