@@ -24,7 +24,10 @@ export default function UploadMediaNode({ data }: NodeProps<FlowNodeData>) {
     "
   >
 
-      <button className="w-8 h-8 rounded bg-[#FF8E149E] text-white flex items-center justify-center mr-2">
+      <button 
+        className="w-8 h-8 rounded bg-[#FF8E149E] text-white flex items-center justify-center mr-2"
+        onClick={data.onUploadClick}
+      >
         <Upload size={25} />
       </button>
 
