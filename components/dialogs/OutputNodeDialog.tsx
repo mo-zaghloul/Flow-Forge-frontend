@@ -76,14 +76,19 @@ export default function OutputNodeDialog({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="relative bg-white w-full max-w-2xl rounded-2xl shadow-xl max-h-[90vh] flex flex-col overflow-hidden">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition z-10 bg-white rounded-full p-1"
-        >
-          <X size={24} />
-        </button>
+        <div className="flex items-center justify-between p-8 pb-0">
+          <h2 className="text-2xl font-bold text-gray-900">
+            Output Node
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition bg-white rounded-full p-1"
+          >
+            <X size={24} />
+          </button>
+        </div>
 
-        <div className="p-8">
+        <div className="p-8 pt-6">
           <div className="border-2 border-gray-200 rounded-2xl p-6 bg-gray-50">
             <ScrollArea className="h-[400px]">
               <div className="prose prose-sm max-w-none pr-4">
@@ -93,7 +98,7 @@ export default function OutputNodeDialog({
           </div>
         </div>
 
-        <div className="flex gap-3 p-6 border-t bg-white rounded-b-2xl">
+        <div className="flex gap-3 px-8 pb-8 pt-0 bg-white rounded-b-2xl">
           <Button 
             onClick={handleDownload}
             className="flex-1 flex items-center justify-center gap-2 rounded-full h-12 bg-black hover:bg-gray-800 text-white"
