@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { X } from "lucide-react";
+import { Download, Share2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from "react-markdown";
 
 interface OutputNodeDialogProps {
@@ -13,87 +12,102 @@ interface OutputNodeDialogProps {
   onSave?: (content: string) => void;
 }
 
+const STATIC_OUTPUT = `### General Summary of **Software Engineering II**
+
+SWE 2 usually builds on SWE 1 and focuses on **advanced software development practices** and **real-world systems**.
+
+Typical topics include:
+
+• **Software Architecture & Design Patterns** (MVC, layered architecture, Singleton, Factory, Observer, etc.)
+
+• **Object-Oriented Design principles** (SOLID principles, UML diagrams)
+
+• **Agile & Scrum methodologies** (sprints, user stories, product backlog)
+
+• **Requirements engineering (advanced)** (functional vs non-functional requirements)
+
+• **Testing techniques** (unit testing, integration testing, test-driven development)
+
+• **Version control & collaboration** (Git, GitHub workflows)
+
+• **Software maintenance & refactoring**
+
+• **Project management basics** (estimation, risk management)
+
+• **Team-based software project**
+
+**Goal of the course:**
+To prepare students to **design, develop, test, and maintain large-scale software systems** while working in teams using industry practices.`;
+
 export default function OutputNodeDialog({ 
   isOpen, 
   onClose,
-  initialContent = "",
-  onSave 
 }: OutputNodeDialogProps) {
-  const [content, setContent] = useState(initialContent);
-  const [isPreview, setIsPreview] = useState(false);
+  const handleDownload = () => {
+    const blob = new Blob([STATIC_OUTPUT], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'workflow-output.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
-  const handleSave = () => {
-    onSave?.(content);
-    onClose();
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Workflow Output',
+          text: STATIC_OUTPUT,
+        });
+      } catch (err) {
+        console.log('Share cancelled');
+      }
+    } else {
+      navigator.clipboard.writeText(STATIC_OUTPUT);
+      alert('Content copied to clipboard!');
+    }
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="relative bg-white w-full max-w-3xl rounded-3xl shadow-xl p-8 max-h-[90vh] flex flex-col">
-        {/* Close Button */}
+      <div className="relative bg-white w-full max-w-2xl rounded-2xl shadow-xl max-h-[90vh] flex flex-col overflow-hidden">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition z-10 bg-white rounded-full p-1"
         >
           <X size={24} />
         </button>
 
-        {/* Title */}
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Output Node
-        </h2>
-
-        {/* Toggle Preview/Edit */}
-        <div className="flex gap-2 mb-4">
-          <Button
-            variant={!isPreview ? "default" : "outline"}
-            onClick={() => setIsPreview(false)}
-            size="sm"
-          >
-            Edit
-          </Button>
-          <Button
-            variant={isPreview ? "default" : "outline"}
-            onClick={() => setIsPreview(true)}
-            size="sm"
-          >
-            Preview
-          </Button>
+        <div className="p-8">
+          <div className="border-2 border-gray-200 rounded-2xl p-6 bg-gray-50">
+            <ScrollArea className="h-[400px]">
+              <div className="prose prose-sm max-w-none pr-4">
+                <ReactMarkdown>{STATIC_OUTPUT}</ReactMarkdown>
+              </div>
+            </ScrollArea>
+          </div>
         </div>
 
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto mb-6">
-          {!isPreview ? (
-            <Textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Enter your output content here... (Supports Markdown)"
-              className="min-h-[400px] font-mono text-sm"
-            />
-          ) : (
-            <div className="border rounded-lg p-6 min-h-[400px] bg-gray-50">
-              {content ? (
-                <div className="prose prose-sm max-w-none">
-                  <ReactMarkdown>{content}</ReactMarkdown>
-                </div>
-              ) : (
-                <p className="text-gray-400 text-center py-8">
-                  No content to preview. Switch to Edit mode to add content.
-                </p>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={onClose}>
-            Cancel
+        <div className="flex gap-3 p-6 border-t bg-white rounded-b-2xl">
+          <Button 
+            onClick={handleDownload}
+            className="flex-1 flex items-center justify-center gap-2 rounded-full h-12 bg-black hover:bg-gray-800 text-white"
+          >
+            <Download className="w-4 h-4" />
+            Download
           </Button>
-          <Button onClick={handleSave} className="bg-black hover:bg-gray-800">
-            Save Output
+          <Button 
+            onClick={handleShare}
+            variant="outline"
+            className="flex-1 flex items-center justify-center gap-2 rounded-full h-12"
+          >
+            <Share2 className="w-4 h-4" />
+            Share
           </Button>
         </div>
       </div>
