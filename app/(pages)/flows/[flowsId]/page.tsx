@@ -10,7 +10,7 @@ import {
   GetWorkflowResponse,
   UpdateWorkflow,
   UpdateWorkflowRequest,
-  ExecuteNode,
+  ExecuteWorkflowStream,
   NodeRunResponse,
 } from "@/lib/api/node-api";
 import { Node, Edge } from "reactflow";
@@ -24,6 +24,8 @@ export default function FlowPage() {
   const [saving, setSaving] = useState(false);
   const [executing, setExecuting] = useState(false);
   const [outputDialogOpen, setOutputDialogOpen] = useState(false);
+  const [streamingContent, setStreamingContent] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
   const [executionResponse, setExecutionResponse] =
     useState<NodeRunResponse | null>(null);
 
@@ -99,27 +101,46 @@ export default function FlowPage() {
     }
   };
 
-  // Execute workflow
+  // Execute workflow with streaming
   const handleExecute = async () => {
     if (!workflowId) return;
 
     try {
       setExecuting(true);
-
-      // First, save the workflow
-      await handleSave();
-
-      // Then execute it
-      const response = await ExecuteNode(workflowId);
-      setExecutionResponse(response);
+      setStreamingContent("");
+      setIsStreaming(true);
       setOutputDialogOpen(true);
 
-      console.log("Workflow executed successfully:", response);
+      // First, save the workflow
+      // await handleSave();
+
+      // Then execute with streaming
+      await ExecuteWorkflowStream(
+        workflowId,
+        // On each token
+        (token) => {
+          setStreamingContent((prev) => prev + token);
+        },
+        // On complete
+        (response) => {
+          setExecutionResponse(response);
+          setIsStreaming(false);
+          setExecuting(false);
+          console.log("Workflow executed successfully:", response);
+        },
+        // On error
+        (error) => {
+          console.error("Failed to execute workflow:", error);
+          setIsStreaming(false);
+          setExecuting(false);
+          // TODO: Show error message
+        }
+      );
     } catch (error) {
       console.error("Failed to execute workflow:", error);
-      // TODO: Show error message
-    } finally {
+      setIsStreaming(false);
       setExecuting(false);
+      // TODO: Show error message
     }
   };
 
@@ -151,13 +172,16 @@ export default function FlowPage() {
       </div>
 
       {/* Output Dialog */}
-      {executionResponse && (
-        <OutputNodeDialog
-          isOpen={outputDialogOpen}
-          onClose={() => setOutputDialogOpen(false)}
-          initialContent={executionResponse.workflow_output}
-        />
-      )}
+      <OutputNodeDialog
+        isOpen={outputDialogOpen}
+        onClose={() => {
+          setOutputDialogOpen(false);
+          setStreamingContent("");
+          setIsStreaming(false);
+        }}
+        initialContent={streamingContent || executionResponse?.workflow_output}
+        isStreaming={isStreaming}
+      />
     </div>
   );
 }
