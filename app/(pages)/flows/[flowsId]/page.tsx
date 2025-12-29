@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import FlowCanvas from "@/components/flow/FlowCanvas";
 import WorkflowTopbar from "@/components/WorkFlowTopBar";
-import OutputDialog from "@/components/dialogs/OutputDialog";
 import {
   GetWorkflow,
   GetWorkflowResponse,

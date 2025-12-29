@@ -21,7 +21,7 @@ import { X } from "lucide-react";
 
 import BaseNode from "./BaseNode";
 import NodePickerDialog from "./dialog";
-import { FlowNodeData } from "../types/node-config";
+import { FlowNodeData, AgentNodeConfig, UploadNodeConfig, OutputNodeConfig } from "../types/node-config";
 import { NodeTemplate } from "../types/node-config";
 import CreateAgentDialog from "../dialogs/CreateAgentDialog";
 import UploadMediaDialog from "../dialogs/UploadMediaDialog";
@@ -105,6 +105,50 @@ const FlowCanvas = forwardRef<FlowCanvasRef, FlowCanvasProps>(
     const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [uploadedFile, setUploadedFile] = useState<CloudinaryUploadResult | null>(null);
     const [outputNodeDialogOpen, setOutputNodeDialogOpen] = useState(false);
+    
+    // Track the current node being edited (for passing config to dialogs)
+    const [currentEditingNodeId, setCurrentEditingNodeId] = useState<string | null>(null);
+
+    // Helper to get current node config
+    const getCurrentNodeConfig = useCallback(() => {
+      if (!currentEditingNodeId) return null;
+      const node = nodes.find((n) => n.id === currentEditingNodeId);
+      return node?.data;
+    }, [currentEditingNodeId, nodes]);
+
+    // Helper to update node config
+    const updateNodeConfig = useCallback(
+      (nodeId: string, configUpdates: Partial<FlowNodeData>) => {
+        setNodes((nds) =>
+          nds.map((node) => {
+            if (node.id === nodeId) {
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  ...configUpdates,
+                },
+              };
+            }
+            return node;
+          })
+        );
+      },
+      [setNodes]
+    );
+
+    // Get all uploaded media from upload nodes (for agent dropdown)
+    const getUploadedMediaList = useCallback(() => {
+      return nodes
+        .filter((node) => node.data.id === "upload" && node.data.uploadConfig?.mediaUrl)
+        .map((node) => ({
+          nodeId: node.id,
+          label: node.data.uploadConfig?.fileName || node.data.label,
+          mediaUrl: node.data.uploadConfig?.mediaUrl || "",
+          resourceType: node.data.uploadConfig?.resourceType || "",
+          format: node.data.uploadConfig?.format || "",
+        }));
+    }, [nodes]);
 
     // Expose getNodes and getEdges to parent via ref
     useImperativeHandle(ref, () => ({
@@ -123,31 +167,62 @@ const FlowCanvas = forwardRef<FlowCanvasRef, FlowCanvasProps>(
     }, []);
 
     const handleAgentDialogClick = useCallback((nodeId: string) => {
-      setSelectedSourceNodeId(nodeId);
+      setCurrentEditingNodeId(nodeId);
       setAgentDialogOpen(true);
     }, []);
 
     const handleUploadDialogClick = useCallback((nodeId: string) => {
-      setSelectedSourceNodeId(nodeId);
+      setCurrentEditingNodeId(nodeId);
       setUploadDialogOpen(true);
     }, []);
 
     const handleUploadSuccess = useCallback((result: CloudinaryUploadResult) => {
       console.log("File uploaded successfully:", result);
       setUploadedFile(result);
-      // TODO: Update node data with the uploaded file public_id
-      // You can store result.public_id in the node's media_url field
-    }, []);
+      
+      // Update the node's upload config with the uploaded file details
+      if (currentEditingNodeId) {
+        const uploadConfig: UploadNodeConfig = {
+          mediaUrl: result.secure_url,
+          publicId: result.public_id,
+          resourceType: result.resource_type,
+          format: result.format,
+          fileName: result.original_filename || result.public_id,
+        };
+        updateNodeConfig(currentEditingNodeId, { 
+          uploadConfig,
+          media_url: result.secure_url,
+        });
+      }
+    }, [currentEditingNodeId, updateNodeConfig]);
 
     const handleOutputNodeClick = useCallback((nodeId: string) => {
-      setSelectedSourceNodeId(nodeId);
+      setCurrentEditingNodeId(nodeId);
       setOutputNodeDialogOpen(true);
     }, []);
 
     const handleOutputSave = useCallback((content: string) => {
       console.log("Output saved:", content);
-      // TODO: Update node data with the output content
-    }, []);
+      if (currentEditingNodeId) {
+        const outputConfig: OutputNodeConfig = {
+          outputType: 'markdown',
+          content,
+        };
+        updateNodeConfig(currentEditingNodeId, { outputConfig });
+      }
+    }, [currentEditingNodeId, updateNodeConfig]);
+
+    // Handle agent config save
+    const handleAgentSave = useCallback((config: AgentNodeConfig) => {
+      console.log("Agent config saved:", config);
+      if (currentEditingNodeId) {
+        updateNodeConfig(currentEditingNodeId, { 
+          agentConfig: config,
+          prompt: config.agentInstructions,
+        });
+      }
+      setAgentDialogOpen(false);
+    }, [currentEditingNodeId, updateNodeConfig]);
 
     const handleSelectNode = useCallback(
       (nodeTemplate: NodeTemplate) => {
@@ -283,17 +358,31 @@ const FlowCanvas = forwardRef<FlowCanvasRef, FlowCanvasProps>(
 
         <CreateAgentDialog
           open={agentDialogOpen}
-          onClose={() => setAgentDialogOpen(false)}
+          onClose={() => {
+            setAgentDialogOpen(false);
+            setCurrentEditingNodeId(null);
+          }}
+          onSave={handleAgentSave}
+          initialConfig={getCurrentNodeConfig()?.agentConfig}
+          uploadedMediaList={getUploadedMediaList()}
         />
         <UploadMediaDialog
           isOpen={uploadDialogOpen}
-          onClose={() => setUploadDialogOpen(false)}
+          onClose={() => {
+            setUploadDialogOpen(false);
+            setCurrentEditingNodeId(null);
+          }}
           onUploadSuccess={handleUploadSuccess}
+          initialConfig={getCurrentNodeConfig()?.uploadConfig}
         />
         <OutputNodeDialog
           isOpen={outputNodeDialogOpen}
-          onClose={() => setOutputNodeDialogOpen(false)}
+          onClose={() => {
+            setOutputNodeDialogOpen(false);
+            setCurrentEditingNodeId(null);
+          }}
           onSave={handleOutputSave}
+          initialContent={getCurrentNodeConfig()?.outputConfig?.content}
         />
         <NodePickerDialog
           open={dialogOpen}

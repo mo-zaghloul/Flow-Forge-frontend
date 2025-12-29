@@ -1,25 +1,36 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
-import { X, Upload, Loader2 } from "lucide-react";
+import { X, Upload, Loader2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { uploadToCloudinary, type CloudinaryUploadResult } from "@/lib/api/cloudinary";
+import type { UploadNodeConfig } from "../types/node-config";
 
 interface UploadMediaDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onUploadSuccess?: (result: CloudinaryUploadResult) => void;
+  initialConfig?: UploadNodeConfig;
 }
 
 export default function UploadMediaDialog({ 
   isOpen, 
   onClose,
-  onUploadSuccess 
+  onUploadSuccess,
+  initialConfig,
 }: UploadMediaDialogProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Reset state when dialog opens with new config
+  useEffect(() => {
+    if (isOpen) {
+      setFiles([]);
+      setError(null);
+    }
+  }, [isOpen]);
 
   const onDrop = useCallback((accepted: File[]) => {
     setFiles(accepted);
@@ -83,6 +94,20 @@ export default function UploadMediaDialog({
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
           Upload Media
         </h2>
+
+        {/* Previously Uploaded File Info */}
+        {initialConfig?.mediaUrl && !files.length && (
+          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="w-5 h-5 text-green-600" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-green-800">Previously uploaded file</p>
+                <p className="text-xs text-green-600 truncate">{initialConfig.fileName || initialConfig.publicId}</p>
+                <p className="text-xs text-gray-500 mt-1">Type: {initialConfig.resourceType} • Format: {initialConfig.format}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Dropzone Box */}
         <div

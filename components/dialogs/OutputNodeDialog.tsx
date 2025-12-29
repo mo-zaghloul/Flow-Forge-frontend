@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Download, Share2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface OutputNodeDialogProps {
   isOpen: boolean;
@@ -42,9 +44,21 @@ To prepare students to **design, develop, test, and maintain large-scale softwar
 export default function OutputNodeDialog({ 
   isOpen, 
   onClose,
+  initialContent,
+  onSave,
 }: OutputNodeDialogProps) {
+  // Use initialContent if provided, otherwise use the static output
+  const [content, setContent] = useState(initialContent || STATIC_OUTPUT);
+
+  // Update content when initialContent changes
+  useEffect(() => {
+    if (isOpen) {
+      setContent(initialContent || STATIC_OUTPUT);
+    }
+  }, [isOpen, initialContent]);
+
   const handleDownload = () => {
-    const blob = new Blob([STATIC_OUTPUT], { type: 'text/markdown' });
+    const blob = new Blob([content], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -60,15 +74,21 @@ export default function OutputNodeDialog({
       try {
         await navigator.share({
           title: 'Workflow Output',
-          text: STATIC_OUTPUT,
+          text: content,
         });
       } catch (err) {
         console.log('Share cancelled');
       }
     } else {
-      navigator.clipboard.writeText(STATIC_OUTPUT);
+      navigator.clipboard.writeText(content);
       alert('Content copied to clipboard!');
     }
+  };
+
+  const handleClose = () => {
+    // Save the content before closing
+    onSave?.(content);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -81,7 +101,7 @@ export default function OutputNodeDialog({
             Output Node
           </h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition bg-white rounded-full p-1"
           >
             <X size={24} />
@@ -89,10 +109,10 @@ export default function OutputNodeDialog({
         </div>
 
         <div className="p-8 pt-6">
-          <div className="border-2 border-gray-200 rounded-2xl p-6 bg-gray-50">
+          <div className="border-2 border-gray-200 rounded-2xl p-6 bg-white">
             <ScrollArea className="h-[400px]">
-              <div className="prose prose-sm max-w-none pr-4">
-                <ReactMarkdown>{STATIC_OUTPUT}</ReactMarkdown>
+              <div className="markdown-content prose prose-sm max-w-none pr-4">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
               </div>
             </ScrollArea>
           </div>
