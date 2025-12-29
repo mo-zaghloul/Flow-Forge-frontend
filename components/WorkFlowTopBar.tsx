@@ -25,7 +25,7 @@ export default function WorkflowTopbar({
       {/* Left: Title and Author */}
       <div className="flex flex-col">
         <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
-        <p className="text-sm text-gray-500">by {author}</p>
+        <p className="text-sm text-gray-500">by You {author}</p>
       </div>
 
       {/* Right: Action Buttons */}
