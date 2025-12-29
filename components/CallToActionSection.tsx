@@ -34,7 +34,7 @@ export default function CallToActionSection() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/canvas">
+            <Link href="/flows">
               <Button 
                 size="lg" 
                 className="text-lg px-8 py-6 group"
