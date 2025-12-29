@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import FlowCanvas from "@/components/flow/FlowCanvas";
 import WorkflowTopbar from "@/components/WorkFlowTopBar";
+import OutputNodeDialog from "@/components/dialogs/OutputNodeDialog";
 import {
   GetWorkflow,
   GetWorkflowResponse,
@@ -151,10 +152,10 @@ export default function FlowPage() {
 
       {/* Output Dialog */}
       {executionResponse && (
-        <OutputDialog
-          open={outputDialogOpen}
-          onOpenChange={setOutputDialogOpen}
-          response={executionResponse}
+        <OutputNodeDialog
+          isOpen={outputDialogOpen}
+          onClose={() => setOutputDialogOpen(false)}
+          initialContent={executionResponse.workflow_output}
         />
       )}
     </div>

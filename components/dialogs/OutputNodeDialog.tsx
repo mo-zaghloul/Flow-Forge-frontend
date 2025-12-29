@@ -14,50 +14,26 @@ interface OutputNodeDialogProps {
   onSave?: (content: string) => void;
 }
 
-const STATIC_OUTPUT = `### General Summary of **Software Engineering II**
-
-SWE 2 usually builds on SWE 1 and focuses on **advanced software development practices** and **real-world systems**.
-
-Typical topics include:
-
-• **Software Architecture & Design Patterns** (MVC, layered architecture, Singleton, Factory, Observer, etc.)
-
-• **Object-Oriented Design principles** (SOLID principles, UML diagrams)
-
-• **Agile & Scrum methodologies** (sprints, user stories, product backlog)
-
-• **Requirements engineering (advanced)** (functional vs non-functional requirements)
-
-• **Testing techniques** (unit testing, integration testing, test-driven development)
-
-• **Version control & collaboration** (Git, GitHub workflows)
-
-• **Software maintenance & refactoring**
-
-• **Project management basics** (estimation, risk management)
-
-• **Team-based software project**
-
-**Goal of the course:**
-To prepare students to **design, develop, test, and maintain large-scale software systems** while working in teams using industry practices.`;
-
 export default function OutputNodeDialog({ 
   isOpen, 
   onClose,
   initialContent,
   onSave,
 }: OutputNodeDialogProps) {
-  // Use initialContent if provided, otherwise use the static output
-  const [content, setContent] = useState(initialContent || STATIC_OUTPUT);
+  // Use initialContent if provided, otherwise show placeholder
+  const [content, setContent] = useState(initialContent || "");
 
   // Update content when initialContent changes
   useEffect(() => {
     if (isOpen) {
-      setContent(initialContent || STATIC_OUTPUT);
+      setContent(initialContent || "");
     }
   }, [isOpen, initialContent]);
 
+  const displayContent = content || "No output available yet. Execute the workflow to see results.";
+
   const handleDownload = () => {
+    if (!content) return;
     const blob = new Blob([content], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -70,6 +46,7 @@ export default function OutputNodeDialog({
   };
 
   const handleShare = async () => {
+    if (!content) return;
     if (navigator.share) {
       try {
         await navigator.share({
@@ -112,7 +89,7 @@ export default function OutputNodeDialog({
           <div className="border-2 border-gray-200 rounded-2xl p-6 bg-white">
             <ScrollArea className="h-[400px]">
               <div className="markdown-content prose prose-sm max-w-none pr-4">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayContent}</ReactMarkdown>
               </div>
             </ScrollArea>
           </div>
@@ -121,15 +98,17 @@ export default function OutputNodeDialog({
         <div className="flex gap-3 px-8 pb-8 pt-0 bg-white rounded-b-2xl">
           <Button 
             onClick={handleDownload}
-            className="flex-1 flex items-center justify-center gap-2 rounded-full h-12 bg-black hover:bg-gray-800 text-white"
+            disabled={!content}
+            className="flex-1 flex items-center justify-center gap-2 rounded-full h-12 bg-black hover:bg-gray-800 text-white disabled:opacity-50"
           >
             <Download className="w-4 h-4" />
             Download
           </Button>
           <Button 
             onClick={handleShare}
+            disabled={!content}
             variant="outline"
-            className="flex-1 flex items-center justify-center gap-2 rounded-full h-12"
+            className="flex-1 flex items-center justify-center gap-2 rounded-full h-12 disabled:opacity-50"
           >
             <Share2 className="w-4 h-4" />
             Share
